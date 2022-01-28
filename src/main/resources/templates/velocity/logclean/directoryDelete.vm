@@ -1,0 +1,1 @@
+find ${map.backupPath} -mindepth 1 -maxdepth 1 -mtime +${map.delCycle} -type d -exec rm -rf {} \;

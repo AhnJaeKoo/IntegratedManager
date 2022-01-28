@@ -1,0 +1,102 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'	// 의존성 spring버전에 맞게 관리 플러그인
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id 'java'
+	id 'eclipse'
+	id 'war'
+}
+
+group = 'com.enuri.integratedmanager'
+//version = new Date().format("yyyyMMdd_HHmmss")
+description = 'IntegratedManager'
+sourceCompatibility = 15
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+	jcenter()
+	maven { url 'http://:8083/nexus/content/groups/public/' }
+}
+
+ext {
+	set('springCloudVersion', "2020.0.3")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'	// web 사용
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'	// thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'	// jpa
+    implementation 'org.springframework.boot:spring-boot-starter-batch'	// batch
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'	// DB
+    implementation 'org.springframework.boot:spring-boot-starter-security'	// security
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'	// actuator
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
+    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3'	// mybatis
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.6.2'	// MariaDB
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'	// jsp 인식
+    implementation 'javax.servlet:jstl:1.2'	// jstl
+    implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'	// log4j2
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'	// json
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.2'	// jackson
+    implementation 'org.quartz-scheduler:quartz:2.3.2'	// quartz
+    implementation 'com.jcraft:jsch:0.1.55'	// ftp
+    implementation 'org.springframework:springloaded:1.2.8.RELEASE'	// class loaded
+    runtimeOnly 'mysql:mysql-connector-java:8.0.21'
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'	// devtools
+    runtimeOnly 'com.h2database:h2:1.4.200'
+    //test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.batch:spring-batch-test:4.2.4.RELEASE'
+	testCompile group: 'junit', name: 'junit', version: '4.13.1'
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+	implementation 'com.mchange:mchange-commons-java:0.2.20'
+	compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+	compile group: 'org.apache.velocity', name: 'velocity', version: '1.7'
+
+	compile 'org.springframework.boot:spring-boot-starter-aop'
+
+	//email send
+	implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
+	implementation group: 'javax.activation', name: 'activation', version: '1.1.1'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
+
+def querydslDir = "src/main/generated"
+
+querydsl {
+  jpa = true
+  querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDirs = ['src/main/java', querydslDir]
+}
+
+configurations {
+  querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+  options.annotationProcessorPath = configurations.querydsl
+}

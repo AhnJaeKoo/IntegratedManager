@@ -1,0 +1,4 @@
+cp ${map.cutLogFile} ${map.backupPath}/${map.backupFile};
+touch ${map.cutLogFile}.tmp;
+cat ${map.cutLogFile}.tmp > ${map.cutLogFile};
+rm -rf ${map.cutLogFile}.tmp

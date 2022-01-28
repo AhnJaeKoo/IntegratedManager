@@ -1,0 +1,1 @@
+find ${map.backupPath} -name '*.${map.fileExtension}' -mtime +${map.delCycle} -delete;

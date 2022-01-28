@@ -1,0 +1,75 @@
+#debug: true
+spring:
+  application:
+    name: IntegratedManager
+  #템플릿 엔진 설정
+  thymeleaf:    view-names:    - thymeleaf/*    
+    prefix: classpath:templates/
+    suffix: .html  
+    error-path: thymeleaf/error/
+  #jsp 설정
+  mvc:    view:      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  #devtools
+  devtools:         livereload:      enabled: false   #크롬 live Reload와 조합하여 브라우저 자동 갱신 사용    
+    restart:      enabled: false  # 수정시 자동 재구동 - spring loaded로 인해 false 처리    test:    database:      replace: NONE #테스트 끝나면 자동 롤백  messages:    basename: messages/message #resource/messages/message*.properties
+    encoding: UTF-8
+    cache-duration: 60 #프로퍼티 파일의 변경을 감지할 시간 간격을 지정한다.
+    use-code-as-default-message: true #없는 메세지일 경우 예외를 발생시키는 대신 코드를 기본 메세지로 한다.    
+  output:    ansi:      enabled: detect #로그 컬러 사용      
+  banner:    image:      #location: classpath:springBoot.png
+      width: 120
+      height: 15  
+  #sleuth & zipkin
+  sleuth:
+    sampler:
+      probability: 1.0 # 기본값 0.1  샘플링 정의 0~1(100%)  
+
+# actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+server:
+  port: 8082
+  # 에러페이지  error:        include-exception: true # 오류 응답에 exception의 내용을 포함할지 여부
+    include-stacktrace: always # 오류 응답에 stacktrace 내용을 포함할 지 여부
+
+
+---
+# 로그 설정
+logging:
+  config: classpath:conf/log/logback-spring.xml  
+  level:
+      "[org.springframework.security]": INFO      
+
+---
+templates:
+  logclean-path: templates/velocity/logclean/
+---
+job:  
+  pool-size: 30
+  # 스케줄 전부 읽어와서 refresh 하는 시간  schedule-refresh:    cron: 00 00 23 * * *
+  dbbackup:
+    cron: 00 58 23 * * *
+  log-clean:
+    cron: 00 01 00 * * *
+---
+spring:
+  config:
+    activate:
+      on-profile:
+      - local  
+  zipkin:
+    base-url: http://localhost:9411/
+      
+---
+spring:
+  config:
+    activate:
+      on-profile:
+      - prod
+  zipkin:
+    base-url: http://:9411/

@@ -1,0 +1,62 @@
+{"properties": [
+  {
+    "name": "mybatis.config.location",
+    "type": "java.lang.String",
+    "description": "A description for 'mybatis.config.location'"
+  },
+  {
+    "name": "spring.cloud",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.cloud'"
+  },
+  {
+    "name": "job.dbbackup.cron",
+    "type": "java.lang.String",
+    "description": "A description for 'job.dbbackup.cron'"
+  },
+  {
+    "name": "spring.h2.backup-path",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.h2.backup-path'"
+  },
+  {
+    "name": "spring.h2.cut-day",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.h2.cut-day'"
+  },
+  {
+    "name": "spring.thymeleaf.error-path",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.thymeleaf.error-path'"
+  },
+  {
+    "name": "job.pool-size",
+    "type": "java.lang.String",
+    "description": "A description for 'job.pool-size'"
+  },
+  {
+    "name": "job.schedule-refresh.cron",
+    "type": "java.lang.String",
+    "description": "A description for 'job.schedule-refresh.cron'"
+  },
+  {
+    "name": "job.log-clean.cron",
+    "type": "java.lang.String",
+    "description": "A description for 'job.log-clean.cron'"
+  },
+  {
+    "name": "templates.logclean-path",
+    "type": "java.lang.String",
+    "description": "A description for 'templates.logclean-path'"
+  },
+  {
+    "name": "spring.h2.db-file-path",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.h2.db-file-path'"
+  },
+  {
+    "name": "spring.h2.db-file-name",
+    "type": "java.lang.String[]",
+    "description": "A description for 'spring.h2.db-file-name'"
+  }
+]}

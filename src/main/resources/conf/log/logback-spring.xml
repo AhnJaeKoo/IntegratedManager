@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 60초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
+<configuration scan="true" scanPeriod="60 seconds">
+	<property name="LOG_PATH"
+		value="/data/groupMatching/IntegratedManager/logs" />
+	<property name="FILE_NAME" value="IM" />
+
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!-- [2018-08-17 15:24:21.355] [log level] [class.java line][message] -->
+			<!-- [날짜시간] [로그레벨] [로그클래스:몇번째줄][메소드명] - [로그메세지] -->
+			<!-- <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%p][%thread] [%F:%L]\(%M\) - [%m]%n -->
+			<!-- <pattern>${LOG_LEVEL_PATTERN:-%5p} ${PID:- } [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%p][%thread] [%F:%L]\(%M\) - [%m]%n -->
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [${LOG_LEVEL_PATTERN:-%5p}][%thread] [%F:%L]\(%M\) - [%m]%n
+			<!-- <pattern>[traceid=%X{traceId:-} spanid=%X{spanId:-} parentspanid=%X{parentId:-}] -->
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- FILE Appender -->
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/${FILE_NAME}.log</file>
+		<!-- 일자별 로그파일 저장 -->
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/${FILE_NAME}_%d{yyyyMMdd}.log
+			</fileNamePattern>
+			<!-- 일자별 로그파일 저장 기간 설정 -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5p] [%F]%M\(%L\) : %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="errorMailer" class="ch.qos.logback.classic.net.SMTPAppender">
+		<smtpHost></smtpHost>
+		<smtpPort></smtpPort>
+		<username></username>
+		<password></password>
+		<To></To>
+		<From></From>
+		<Subject>SYSTEM ERROR: %logger{20} - %m</Subject>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%date [%F:%L]\(%M\) - [%m]%n</Pattern>
+		</layout>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+          	<level>ERROR</level>
+      	</filter>
+	</appender>
+
+	<logger name="jdbc" level="OFF" />
+	<logger name="jdbc.sqlonly" level="OFF" /> <!-- jdbc.sqlonly : SQL문만을 로그로 남기며, PreparedStatement일 경우 관련된 argument 값으로
+		대체된 SQL문이 보여진다. -->
+	<logger name="jdbc.sqltiming" level="DEBUG" /> <!-- jdbc.sqltiming : SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds)를 포함한다. -->
+	<logger name="jdbc.audit" level="OFF" /> <!-- jdbc.audit : ResultSet을 제외한 모든 JDBC 호출 정보를 로그로 남긴다. 많은 양의 로그가 생성되므로
+		특별히 JDBC 문제를 추적해야 할 필요가 있는 경우를 제외하고는 사용을 권장하지 않는다. -->
+	<logger name="jdbc.resultset" level="OFF" /> <!-- jdbc.resultset : ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가
+		생성된다. -->
+	<logger name="jdbc.resultsettable" level="DEBUG" /> <!-- jdbc.resultsettable : SQL 결과 조회된 데이터의 table을 로그로 남긴다. -->
+	<logger name="jdbc.connection" level="OFF" />
+
+	<!-- 모든 로그 출력 (파일/콘솔) -->
+	<root level="INFO">
+		<appender-ref ref="FILE" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="errorMailer" />
+	</root>
+</configuration>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enuri.integratedmanager.dao.LogMapper">
+	<select id="selectLogList" resultType="com.enuri.integratedmanager.model.LogListModel">
+		SELECT id,
+		       program_id,
+			   server_id,
+		       log_path,
+		       log_filename,
+		       day_cut,
+		       del_cycle,
+		       backup_cycle,
+		       backup_path
+		FROM   log_list
+	</select>
+</mapper>
+

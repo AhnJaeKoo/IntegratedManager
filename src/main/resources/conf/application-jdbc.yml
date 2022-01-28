@@ -1,0 +1,39 @@
+#H2
+spring:
+  config:    activate:      on-profile:      - h2    
+  datasource:
+    hikari:      
+      driver-class-name: org.h2.Driver
+      username: sa
+      password: 
+      connection-init-sql: select 1
+      jdbc-url: "jdbc:h2:file:${spring.h2.db-file-path}log"
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:        web-allow-others: true  #서버에서 브라우저로 원격 연결 차단 방지
+    cut-day: 10 #백업파일 보관일자
+    db-file-name: >  #List<String> 으로 가능한 배열처리
+      log.mv.db,
+      log.trace.db
+---
+spring:
+  config:
+    activate:
+      on-profile:
+      - local  
+  h2:
+    backup-path: d:/h2_db/backup/   
+    db-file-path: d:/h2_db/
+    
+---
+spring:
+  config:
+    activate:
+      on-profile:
+      - prod  
+  h2:
+    backup-path: /data/_backup/GroupMatching/h2_db/
+    db-file-path: /data/groupMatching/IntegratedManager/h2_db/ 
+    
